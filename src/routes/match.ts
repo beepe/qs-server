@@ -63,5 +63,4 @@ export class MatchRouter {
 
 const matchRoutes = new MatchRouter();
 matchRoutes.init();
-
 export default matchRoutes.router;
