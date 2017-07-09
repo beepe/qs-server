@@ -1,0 +1,26 @@
+{
+  "name": "qs-server",
+  "version": "1.0.0",
+  "description": "server for the qs project",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beepe/qs-server.git"
+  },
+  "author": "Bodo Pfannenschwarz <bodo@in-fin-it.de>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/beepe/qs-server/issues"
+  },
+  "homepage": "https://github.com/beepe/qs-server#readme",
+  "dependencies": {
+    "mongoose": "^4.11.1"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^2.2.7",
+    "@types/mongoose": "^4.7.18"
+  }
+}
