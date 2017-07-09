@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "server for the qs project",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "make test"
+    "test": "mocha dist/test",
+    "build": "tsc -p .",
+    "start": "nodemon -e ts --exec \"npm run qs-server\"",
+    "qs-server": "tsc -p . && node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -17,10 +21,25 @@
   },
   "homepage": "https://github.com/beepe/qs-server#readme",
   "dependencies": {
-    "mongoose": "^4.11.1"
+    "body-parser": "^1.17.2",
+    "errorhandler": "^1.5.0",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.1",
+    "morgan": "^1.8.2",
+    "q": "^1.5.0"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.16.4",
+    "@types/chai": "^4.0.1",
+    "@types/errorhandler": "0.0.30",
+    "@types/mocha": "^2.2.41",
     "@types/mongodb": "^2.2.7",
-    "@types/mongoose": "^4.7.18"
+    "@types/mongoose": "^4.7.18",
+    "@types/morgan": "^1.7.32",
+    "@types/q": "^1.0.2",
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2",
+    "mocha-typescript": "^1.1.7",
+    "typescript": "^2.4.1"
   }
 }
