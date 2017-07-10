@@ -7,17 +7,22 @@ import mongoose = require("mongoose"); //import mongoose
 
 //routes
 import { MatchRouter } from "./routes/match";
-import expressMatchRouter from "./routes/match";
+import { SeasonMatchRouter } from "./routes/seasonmatch";
 
+/*
 //interfaces
 import { IMatch } from "./interfaces/match"; //import IMatch
+import { ISeasonMatch } from "./interfaces/seasonmatch"; //import IMatch
 
 //models
 import { IModel } from "./models/model"; //import IModel
 import { IMatchModel } from "./models/match"; //import IMatchModel
+import { ISeasonMatchModel } from "./models/seasonmatch"; //import IMatchModel
 
 //schemas
 import { MatchSchema } from "./schemas/match"; //import matchSchema
+import { SeasonMatchSchema } from "./schemas/seasonmatch"; //import matchSchema
+*/
 
 /**
  * The server.
@@ -28,7 +33,7 @@ export class Server {
 
   public app: express.Application;
 
-  private model: IModel; //an instance of IModel
+  //private model: IModel; //an instance of IModel
 
   /**
    * Bootstrap the application.
@@ -49,8 +54,6 @@ export class Server {
    * @constructor
    */
   constructor() {
-    //instance defaults
-    this.model = Object(); //initialize this to an empty object
 
     //create expressjs application
     this.app = express();
@@ -82,7 +85,8 @@ export class Server {
 
         //use router middleware
         this.app.use("/",router);
-        this.app.use('/match',  expressMatchRouter);
+        this.app.use('/match',  new MatchRouter().router);
+        this.app.use('/seasonmatch',  new SeasonMatchRouter().router);
     }
 
 
@@ -116,7 +120,7 @@ export class Server {
 
     //mount override
     this.app.use(methodOverride());
-*/
+**/
 
  
     //use q promises
@@ -124,10 +128,15 @@ export class Server {
     mongoose.Promise = global.Promise;
 
     //connect to mongoose
-    let connection: mongoose.Connection = mongoose.createConnection(MONGODB_CONNECTION);
+    //const connection = config.get("database.connection");
+    mongoose.connect(MONGODB_CONNECTION);
+    mongoose.connection.on("connected", () => {
+      console.log("Connected to database " + MONGODB_CONNECTION);
+    });
+    mongoose.connection.on("error", (err) => {
+      console.log("Database error " + err);
+});
 
-    //create models
-    this.model.match = connection.model<IMatchModel>("Match", MatchSchema);
 
     // catch 404 and forward to error handler
     this.app.use(function(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {

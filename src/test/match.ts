@@ -37,6 +37,7 @@ class MatchTest {
         awayTeam: "ASV Durlach",
         startTime: new Date("2017-07-22T14:56:59.301Z"),
         quotes: [20,40,60],
+        domain: "GER",
         result: -1,
         playStatus: -1,
         round: 1

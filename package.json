@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "mocha dist/test",
+    "test": "tsc && mocha dist/test",
     "build": "tsc -p .",
     "start": "nodemon -e ts --exec \"npm run qs-server\"",
     "qs-server": "tsc -p . && node ./bin/www"
@@ -24,6 +24,7 @@
     "body-parser": "^1.17.2",
     "errorhandler": "^1.5.0",
     "express": "^4.15.3",
+    "method-override": "^2.3.9",
     "mongoose": "^4.11.1",
     "morgan": "^1.8.2",
     "q": "^1.5.0"
