@@ -1,9 +1,8 @@
 import mongoose = require("mongoose")
 import { Schema,Model,model } from "mongoose";
 import { ISeasonMatch } from "../interfaces/seasonmatch";
-;
-
 import { ISeasonMatchModel } from "../models/seasonmatch";
+import * as Q from "q";
 
 export var SeasonMatchSchema: Schema = new Schema({
   createdAt: {type: Date, default: Date.now },

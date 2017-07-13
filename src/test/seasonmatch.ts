@@ -1,3 +1,4 @@
+import { SeasonMatch } from './../schemas/seasonmatch';
 import { suite, test } from "mocha-typescript";
 import { ISeasonMatch } from "../interfaces/seasonMatch";
 import { ISeasonMatchModel } from "../models/seasonMatch";
@@ -55,7 +56,9 @@ class SeasonMatchTest {
       result.user.name.should.equal("Bodo");
       result.season.should.equal("1");
       result.status.should.equal(1);
-      result.tipMatches.should.be.an('array').that.has.property('[0].yield', 100);
+      console.log("Array has length "+result.tipMatches.length+": "+JSON.stringify(result.tipMatches))
+      result.tipMatches.should.be.an('array');
+      result.tipMatches[0].yield.should.equal(100);
 
     });
   }
@@ -69,4 +72,31 @@ class SeasonMatchTest {
             }
       );
   }
+
+  @test("should add a tipmatch to seasonmatch")
+  public addMatch(done) {
+    SeasonMatchTest.SeasonMatch.findOne().then( 
+      res => {
+        console.log("1 - now adding to seasonmatch "+res._id);
+          SeasonMatchTest.SeasonMatch.schema.statics.addMatch(res._id, "5963e1e98ad39f6d4ca22636" ).then(
+            res2 => {
+              console.log("2");
+              console.log("res2 is "+JSON.stringify(res2));
+              res2.tipMatches.should.be.an('array').that.has.property('[0].match._id',"5963e1e98ad39f6d4ca22636");
+              done();
+              ;
+            }
+          )
+      }
+    ).catch( err => { 
+      console.log(err); done();
+    }); 
+    
+  }
+
+  /*
+  @test("should remove the tipmatch from seasonmatch")
+  public deleteMatch() {
+
+  }*/
 }

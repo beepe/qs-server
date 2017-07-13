@@ -12,3 +12,4 @@ export interface ISeasonMatch {
   points: {self:number, other:number},
   adversary?: ISeasonMatch
 }
+

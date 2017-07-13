@@ -42,7 +42,6 @@ export class MatchRouter {
       });
   }
 
-
   public getAll(req: Request, res: Response, next: NextFunction) {
       Match.find().then( (matches:IMatchModel[]) => {
           res.json(matches);
