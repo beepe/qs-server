@@ -5,7 +5,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "tsc && mocha dist/test",
+    "test": "tsc && mocha dist/test/match.js",
+    "test-new": "tsc && mocha dist/test/ ",
+    "debug-test": "tsc && mocha debug-brk dist/test/match.js --reporter spec  ",
     "build": "tsc -p .",
     "start": "nodemon -e ts --exec \"npm run qs-server\"",
     "qs-server": "tsc -p . && node ./bin/www"
@@ -22,6 +24,7 @@
   "homepage": "https://github.com/beepe/qs-server#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "chai-as-promised": "^7.1.1",
     "errorhandler": "^1.5.0",
     "express": "^4.15.3",
     "method-override": "^2.3.9",
@@ -32,6 +35,7 @@
   "devDependencies": {
     "@types/body-parser": "^1.16.4",
     "@types/chai": "^4.0.1",
+    "@types/chai-as-promised": "0.0.31",
     "@types/errorhandler": "0.0.30",
     "@types/mocha": "^2.2.41",
     "@types/mongodb": "^2.2.7",

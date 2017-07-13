@@ -17,5 +17,17 @@ export var SeasonMatchSchema: Schema = new Schema({
   adversary: {type: Schema.Types.ObjectId, ref: 'SeasonMatch'}
 });
 
-export const SeasonMatch: Model<ISeasonMatchModel> = mongoose.model<ISeasonMatchModel>("SeasonMatch", SeasonMatchSchema);
+export const SeasonMatch: Model<ISeasonMatchModel> = getModel()
+
+
+
+function getModel(): Model<ISeasonMatchModel>  {
+ 
+  // Check to see if the model has been registered with mongoose
+  // if it exists return that model
+  if ( mongoose.modelNames().indexOf("SeasonMatch") > -1 ) return mongoose.model("SeasonMatch");
+  // if no current model exists register and return new model
+  return  mongoose.model<ISeasonMatchModel>("SeasonMatch", SeasonMatchSchema);
+}
+
 

@@ -19,3 +19,15 @@ export var MatchSchema: Schema = new Schema({
 
 export const Match: Model<IMatchModel> = mongoose.model<IMatchModel>("Match", MatchSchema);
 
+export const SeasonMatch: Model<IMatchModel> = getModel()
+
+
+
+function getModel(): Model<IMatchModel>  {
+ 
+  // Check to see if the model has been registered with mongoose
+  // if it exists return that model
+  if ( mongoose.modelNames().indexOf("Match") > -1 ) return mongoose.model("Match");
+  // if no current model exists register and return new model
+  return  mongoose.model<IMatchModel>("Match", MatchSchema);
+}
