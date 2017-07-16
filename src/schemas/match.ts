@@ -17,9 +17,7 @@ export var MatchSchema: Schema = new Schema({
   domain: String
 });
 
-export const Match: Model<IMatchModel> = mongoose.model<IMatchModel>("Match", MatchSchema);
-
-export const SeasonMatch: Model<IMatchModel> = getModel()
+export const Match: Model<IMatchModel> = getModel()
 
 
 
