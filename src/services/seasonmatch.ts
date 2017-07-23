@@ -18,10 +18,12 @@ export class SeasonMatchService {
 
 
     deleteMatchFromSeasonMatch(id: string, matchid:string) {
-        var query = {"_id":id,
-            "tipMatches.match._id":matchid};
-            
+        var query = {"_id":Object(id)};
+        console.log("Deleting "+matchid+" from SeasonMatch "+id);
+
         return SeasonMatch.update(query,
-        {$pull: { tipMatches: {'match._id':matchid}}});
+        {$pull: { tipMatches : {"match": Object(matchid)}}},
+        { safe: true });
     }
+
 }

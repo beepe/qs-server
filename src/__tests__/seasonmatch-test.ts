@@ -1,3 +1,4 @@
+import { ISeasonMatchModel } from './../models/seasonmatch';
 
 import { IMatch } from "../interfaces/match";
 import { IMatchModel } from "../models/match";
@@ -7,8 +8,9 @@ import mongoose = require("mongoose");
 
 import { SeasonMatchService } from '../services/seasonmatch';
 import { ISeasonMatch } from "../interfaces/seasonMatch";
-import { ISeasonMatchModel } from "../models/seasonMatch";
 import { SeasonMatch } from "../schemas/seasonMatch";
+
+import * as Q from "q";
 
 
 
@@ -84,66 +86,56 @@ describe('Test of SeasonMatch schema', () => {
 
   test('Find a seasonmatch', () => {
     return SeasonMatch.find({ "season": "1" }).then( (res) => {
-        console.log("Found season match "+JSON.stringify(res));
+        //console.log("Found season match "+JSON.stringify(res));
         expect(res[0].season).toEqual("1");
     });
   });
 
-  test("should create a new SeasonMatch", (done) => {
 
-  //create match and return promise
-  new SeasonMatch(smt.data).save().then(result => {
-    //verify _id property exists
-    expect.assertions(5);
-    console.log("We got seasonmatch: "+JSON.stringify(result));
-    expect(result._id).toBeDefined();
-    expect(result.tipMatches.length).toBeGreaterThan(0);
-    expect(result.tipMatches[0].yield).toBe(100);
+  test("should create a new SeasonMatch, delete a match and add again", (done) => {
+    var idOfTestSeasonMatch = 0;
+    //create match and return promise
+    new SeasonMatch(smt.data).save().then(result => {
+      //verify _id property exists
 
-    // now let's immediately retrieve the stuff again
-    SeasonMatch.find({"_id":result._id}).populate('tipMatches.match').then( res2 => {
-        expect(res2[0]._id).toEqual(result._id);
-        expect(res2[0].tipMatches[0].match.homeTeam).toEqual("SV Stupferich"); 
-        console.log("Passed last test item!");
-        done();
+      console.log("We got seasonmatch: "+JSON.stringify(result));
+      expect(result._id).toBeDefined();
+      expect(result.tipMatches.length).toBeGreaterThan(0);
+      expect(result.tipMatches[0].yield).toBe(100);
+      let idOfTestSeasonMatch = result._id;
+
+      // delete the tipmatch 
+      smt.seasonMatchService.deleteMatchFromSeasonMatch(idOfTestSeasonMatch, "5963e1f9f815bc6c20c8a317" ).then( r3 => {
+        console.log("r3 is "+JSON.stringify(r3));
+
+          SeasonMatch.findById(idOfTestSeasonMatch).populate('tipMatches.match').then( r4 => {
+            console.log("r4 is "+JSON.stringify(r4));
+              expect(r4.tipMatches).toHaveLength(0);
+          
+              // add it again
+              smt.seasonMatchService.addMatchToSeasonMatch(idOfTestSeasonMatch, "5963e1e98ad39f6d4ca22636" ).then( r5 => {
+                console.log("r5 is "+JSON.stringify(r5));
+
+                SeasonMatch.findById(idOfTestSeasonMatch).populate('tipMatches.match').then( r6 => {
+                  console.log("r6 is "+JSON.stringify(r6));
+                  expect(r6.tipMatches).toHaveLength(1);
+                  expect(r6.tipMatches[0].match.awayTeam).toEqual("VfB Stuttgart");
+                  done();
+                });
+
+            });
+        }, err4=> {
+            console.log("Error on r4: "+err4);
+            done(err4);
+        });
+     });
+
+
     }).catch( err => {
-      console.log("Error in f2 Seasonmatch creation: "+err);
+      console.log("Error on Seasonmatch creation: "+err);
+      done(err);
     });
-    
-  }).catch( err => {
-    console.log("Error on Seasonmatch creation: "+err);
-  });
-});
 
- 
-test.only("should add a tipmatch to seasonmatch", (done) => {
-    SeasonMatch.findById("596baac6ac925a107c1f7ce9").then( 
-      res => {
-        console.log("1 - now adding to seasonmatch "+res._id);
-          smt.seasonMatchService.addMatchToSeasonMatch(res._id, "5963e1e98ad39f6d4ca22636" ).then(
-            res2 => {
-              console.log("2");
-              console.log("res2 is "+JSON.stringify(res2));
-
-              SeasonMatch.findById("596baac6ac925a107c1f7ce9").populate('tipMatches.match').then( res3 => {
-                  expect(res3.tipMatches[0]).toHaveProperty("match._id","5963e1e98ad39f6d4ca22636");
-                  expect(res3.tipMatches[0].match.homeTeam).toEqual("SV Stupferich");
-                  done();
-              }).catch( err => {
-                  console.log("Error on proving added TM to SM"+err); 
-                  done();
-              });
-
-            }
-          ).catch( err => {
-              console.log("Error on adding a TM to SM"+err); 
-          }); 
-      }
-    ).catch( err => { 
-        console.log("Error on finding a SM to add a TM: "+err);
-    }); 
-
-  });
- 
+}); // of test
 
 }); // of describe
